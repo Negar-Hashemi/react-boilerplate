@@ -31,6 +31,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Ensure correct permissions (macOS)
+        if: matrix.os == 'macos-latest'
+        run: chmod -R +x node_modules/.bin || true
+
+      - name: Clear npm cache (macOS)
+        if: matrix.os == 'macos-latest'
+        run: npm cache clean --force
 
       - name: Testing on OS (${{ matrix.os }}) with Node.js (version ${{ matrix.node-version }}) attempt ${{ matrix.attempt }}
         run: |
