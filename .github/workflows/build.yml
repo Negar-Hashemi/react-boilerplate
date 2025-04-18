@@ -28,14 +28,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install dependencies
+        if: matrix.os != 'macos-latest'
+        run: npm install
+
       - name: Install dependencies (skip ngrok postinstall on unsupported platforms)
+        if: matrix.os == 'macos-latest'
         run: |
-          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            echo "Running on macOS - skipping ngrok postinstall"
-            npm install --ignore-scripts
-          else
-            npm install
-          fi
+          echo "Running on macOS - skipping ngrok postinstall"
+          npm install --ignore-scripts
 
       - name: Manually install ngrok on macOS
         if: matrix.os == 'macos-latest'
